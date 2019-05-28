@@ -4,6 +4,7 @@ namespace SimpleSAML\Store;
 
 use \SimpleSAML\Configuration;
 use \SimpleSAML\Store;
+use Webmozart\Assert\Assert;
 
 /**
  * A data store using Redis to keep the data.
@@ -21,11 +22,11 @@ class Redis extends Store
      */
     public function __construct($redis = null)
     {
-        assert($redis === null || is_subclass_of($redis, 'Predis\\Client'));
-
         if (!class_exists('\Predis\Client')) {
             throw new \SimpleSAML\Error\CriticalConfigurationError('predis/predis is not available.');
         }
+
+        Assert::nullOrIsInstanceOf($redis, \Predis\Client::class);
 
         if ($redis === null) {
             $config = Configuration::getInstance();
@@ -70,8 +71,8 @@ class Redis extends Store
      */
     public function get($type, $key)
     {
-        assert(is_string($type));
-        assert(is_string($key));
+        Assert::string($type);
+        Assert::string($key);
 
         $result = $this->redis->get("{$type}.{$key}");
 
@@ -93,9 +94,9 @@ class Redis extends Store
      */
     public function set($type, $key, $value, $expire = null)
     {
-        assert(is_string($type));
-        assert(is_string($key));
-        assert($expire === null || (is_int($expire) && $expire > 2592000));
+        Assert::string($type);
+        Assert::string($key);
+        Assert::nullOrGreaterThan($expire, 2592000);
 
         $serialized = serialize($value);
 
@@ -116,8 +117,8 @@ class Redis extends Store
      */
     public function delete($type, $key)
     {
-        assert(is_string($type));
-        assert(is_string($key));
+        Assert::string($type);
+        Assert::string($key);
 
         $this->redis->del("{$type}.{$key}");
     }

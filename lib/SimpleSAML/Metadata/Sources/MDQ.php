@@ -5,6 +5,7 @@ namespace SimpleSAML\Metadata\Sources;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SimpleSAML\Logger;
 use SimpleSAML\Utils\HTTP;
+use Webmozart\Assert\Assert;
 
 /**
  * This class implements SAML Metadata Query Protocol
@@ -66,7 +67,7 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     protected function __construct($config)
     {
-        assert(is_array($config));
+        Assert::isArray($config);
 
         if (!array_key_exists('server', $config)) {
             throw new \Exception(__CLASS__.": the 'server' configuration option is not set.");
@@ -124,8 +125,8 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     private function getCacheFilename($set, $entityId)
     {
-        assert(is_string($set));
-        assert(is_string($entityId));
+        Assert::string($set);
+        Assert::string($entityId);
 
         $cachekey = sha1($entityId);
         return $this->cacheDir.'/'.$set.'-'.$cachekey.'.cached.xml';
@@ -144,8 +145,8 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     private function getFromCache($set, $entityId)
     {
-        assert(is_string($set));
-        assert(is_string($entityId));
+        Assert::string($set);
+        Assert::string($entityId);
 
         if (empty($this->cacheDir)) {
             return null;
@@ -203,9 +204,9 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     private function writeToCache($set, $entityId, $data)
     {
-        assert(is_string($set));
-        assert(is_string($entityId));
-        assert(is_array($data));
+        Assert::string($set);
+        Assert::string($entityId);
+        Assert::isArray($data);
 
         if (empty($this->cacheDir)) {
             return;
@@ -231,7 +232,7 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     private static function getParsedSet(\SimpleSAML\Metadata\SAMLParser $entity, $set)
     {
-        assert(is_string($set));
+        Assert::string($set);
 
         switch ($set) {
             case 'saml20-idp-remote':
@@ -274,8 +275,8 @@ class MDQ extends \SimpleSAML\Metadata\MetaDataStorageSource
      */
     public function getMetaData($index, $set)
     {
-        assert(is_string($index));
-        assert(is_string($set));
+        Assert::string($index);
+        Assert::string($set);
 
         Logger::info(__CLASS__.': loading metadata entity ['.$index.'] from ['.$set.']');
 

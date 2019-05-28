@@ -13,6 +13,7 @@
 namespace SimpleSAML\XML;
 
 use LibXMLError;
+use Webmozart\Assert\Assert;
 
 class Errors
 {
@@ -113,7 +114,7 @@ class Errors
      */
     public static function formatError($error)
     {
-        assert($error instanceof LibXMLError);
+        Assert::isInstanceOf($error, LibXMLError::class);
         return 'level='.$error->level.',code='.$error->code.',line='.$error->line.',col='.$error->column.
             ',msg='.trim($error->message);
     }
@@ -131,7 +132,7 @@ class Errors
      */
     public static function formatErrors($errors)
     {
-        assert(is_array($errors));
+        Assert::isArray($errors);
 
         $ret = '';
         foreach ($errors as $error) {

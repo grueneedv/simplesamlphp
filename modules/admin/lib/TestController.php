@@ -7,6 +7,7 @@ use SimpleSAML\Locale\Translate;
 use SimpleSAML\Utils\HTTP;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Webmozart\Assert\Assert;
 
 /**
  * Controller class for the admin module.
@@ -63,7 +64,7 @@ class TestController
             } elseif (!is_null($request->query->get(\SimpleSAML\Auth\State::EXCEPTION_PARAM))) {
                 // This is just a simple example of an error
                 $state = \SimpleSAML\Auth\State::loadExceptionState();
-                assert(array_key_exists(\SimpleSAML\Auth\State::EXCEPTION_DATA, $state));
+                Assert::keyExists($state, \SimpleSAML\Auth\State::EXCEPTION_DATA);
                 throw $state[\SimpleSAML\Auth\State::EXCEPTION_DATA];
             }
 

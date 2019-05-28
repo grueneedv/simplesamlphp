@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Error;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class that wraps SimpleSAMLphp errors in exceptions.
  *
@@ -72,7 +74,7 @@ class Error extends Exception
      */
     public function __construct($errorCode, \Exception $cause = null, $httpCode = null)
     {
-        assert(is_string($errorCode) || is_array($errorCode));
+        Assert::true(is_string($errorCode) || is_array($errorCode));
 
         if (is_array($errorCode)) {
             $this->parameters = $errorCode;
@@ -254,9 +256,9 @@ class Error extends Exception
 
         $show_function = $config->getArray('errors.show_function', null);
         if (isset($show_function)) {
-            assert(is_callable($show_function));
+            Assert::isCallable($show_function);
             call_user_func($show_function, $config, $data);
-            assert(false);
+            Assert::true(false);
         } else {
             $t = new \SimpleSAML\XHTML\Template($config, 'error.php', 'errors');
             $t->data = array_merge($t->data, $data);

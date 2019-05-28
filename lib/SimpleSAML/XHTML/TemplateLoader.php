@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SimpleSAML\XHTML;
 
 /**

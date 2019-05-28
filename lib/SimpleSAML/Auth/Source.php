@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Auth;
 
+use Webmozart\Assert\Assert;
+
 /**
  * This class defines a base class for authentication source.
  *
@@ -33,10 +35,10 @@ abstract class Source
      */
     public function __construct($info, &$config)
     {
-        assert(is_array($info));
-        assert(is_array($config));
+        Assert::isArray($info);
+        Assert::isArray($config);
+        Assert::keyExists($info, 'AuthId');
 
-        assert(array_key_exists('AuthId', $info));
         $this->authId = $info['AuthId'];
     }
 
@@ -51,7 +53,7 @@ abstract class Source
      */
     public static function getSourcesOfType($type)
     {
-        assert(is_string($type));
+        Assert::string($type);
 
         $config = \SimpleSAML\Configuration::getConfig('authsources.php');
 
@@ -114,7 +116,7 @@ abstract class Source
      */
     public function reauthenticate(array &$state)
     {
-        assert(isset($state['ReturnCallback']));
+        Assert::notNull($state['ReturnCallback']);
 
         // the default implementation just copies over the previous authentication data
         $session = \SimpleSAML\Session::getSessionFromRequest();
@@ -137,16 +139,16 @@ abstract class Source
      */
     public static function completeAuth(&$state)
     {
-        assert(is_array($state));
-        assert(array_key_exists('LoginCompletedHandler', $state));
+        Assert::isArray($state);
+        Assert::keyExists($state, 'LoginCompletedHandler');
 
         State::deleteState($state);
 
         $func = $state['LoginCompletedHandler'];
-        assert(is_callable($func));
+        Assert::isCallable($func);
 
         call_user_func($func, $state);
-        assert(false);
+        Assert::true(false);
     }
 
 
@@ -166,8 +168,8 @@ abstract class Source
      */
     public function initLogin($return, $errorURL = null, array $params = [])
     {
-        assert(is_string($return) || is_array($return));
-        assert(is_string($errorURL) || $errorURL === null);
+        Assert::True(is_string($return) || is_array($return));
+        Assert::nullOrString($errorURL);
 
         $state = array_merge($params, [
             '\SimpleSAML\Auth\DefaultAuth.id' => $this->authId, // TODO: remove in 2.0
@@ -215,11 +217,11 @@ abstract class Source
      */
     public static function loginCompleted($state)
     {
-        assert(is_array($state));
-        assert(array_key_exists('\SimpleSAML\Auth\Source.Return', $state));
-        assert(array_key_exists('\SimpleSAML\Auth\Source.id', $state));
-        assert(array_key_exists('Attributes', $state));
-        assert(!array_key_exists('LogoutState', $state) || is_array($state['LogoutState']));
+        Assert::isArray($state);
+        Assert::keyExists($state, '\SimpleSAML\Auth\Source.Return');
+        Assert::keyExists($state, '\SimpleSAML\Auth\Source.id');
+        Assert::keyExists($state, 'Attributes');
+        Assert::true(!array_key_exists('LogoutState', $state) || is_array($state['LogoutState']));
 
         $return = $state['\SimpleSAML\Auth\Source.Return'];
 
@@ -234,7 +236,7 @@ abstract class Source
         } else {
             call_user_func($return, $state);
         }
-        assert(false);
+        Assert::true(false);
     }
 
 
@@ -254,7 +256,7 @@ abstract class Source
      */
     public function logout(&$state)
     {
-        assert(is_array($state));
+        Assert::isArray($state);
         // default logout handler which doesn't do anything
     }
 
@@ -271,16 +273,16 @@ abstract class Source
      */
     public static function completeLogout(&$state)
     {
-        assert(is_array($state));
-        assert(array_key_exists('LogoutCompletedHandler', $state));
+        Assert::isArray($state);
+        Assert::keyExists($state, 'LogoutCompletedHandler');
 
         State::deleteState($state);
 
         $func = $state['LogoutCompletedHandler'];
-        assert(is_callable($func));
+        Assert::isCallable($func);
 
         call_user_func($func, $state);
-        assert(false);
+        Assert::true(false);
     }
 
 
@@ -298,8 +300,8 @@ abstract class Source
      */
     private static function parseAuthSource($authId, $config)
     {
-        assert(is_string($authId));
-        assert(is_array($config));
+        Assert::string($authId);
+        Assert::isArray($config);
 
         self::validateSource($config, $authId);
 
@@ -350,8 +352,8 @@ abstract class Source
      */
     public static function getById($authId, $type = null)
     {
-        assert(is_string($authId));
-        assert($type === null || is_string($type));
+        Assert::string($authId);
+        Assert::nullOrString($type);
 
         // for now - load and parse config file
         $config = \SimpleSAML\Configuration::getConfig('authsources.php');
@@ -390,8 +392,8 @@ abstract class Source
      */
     public static function logoutCallback($state)
     {
-        assert(is_array($state));
-        assert(array_key_exists('\SimpleSAML\Auth\Source.logoutSource', $state));
+        Assert::isArray($state);
+        Assert::keyExists($state, '\SimpleSAML\Auth\Source.logoutSource');
 
         $source = $state['\SimpleSAML\Auth\Source.logoutSource'];
 
@@ -423,8 +425,8 @@ abstract class Source
      */
     protected function addLogoutCallback($assoc, $state)
     {
-        assert(is_string($assoc));
-        assert(is_array($state));
+        Assert::string($assoc);
+        Assert::isArray($state);
 
         if (!array_key_exists('LogoutCallback', $state)) {
             // the authentication requester doesn't have a logout callback
@@ -468,7 +470,7 @@ abstract class Source
      */
     protected function callLogoutCallback($assoc)
     {
-        assert(is_string($assoc));
+        Assert::string($assoc);
 
         $id = strlen($this->authId).':'.$this->authId.$assoc;
 
@@ -482,9 +484,9 @@ abstract class Source
             return;
         }
 
-        assert(is_array($data));
-        assert(array_key_exists('callback', $data));
-        assert(array_key_exists('state', $data));
+        Assert::isArray($data);
+        Assert::keyExists($data, 'callback');
+        Assert::keyExists($data, 'state');
 
         $callback = $data['callback'];
         $callbackState = $data['state'];

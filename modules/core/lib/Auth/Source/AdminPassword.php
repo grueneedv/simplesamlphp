@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\core\Auth\Source;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Authentication source which verifies the password against
  * the 'auth.adminpassword' configuration option.
@@ -19,8 +21,8 @@ class AdminPassword extends \SimpleSAML\Module\core\Auth\UserPassBase
      */
     public function __construct($info, $config)
     {
-        assert(is_array($info));
-        assert(is_array($config));
+        Assert::isArray($info);
+        Assert::isArray($config);
 
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
@@ -43,8 +45,8 @@ class AdminPassword extends \SimpleSAML\Module\core\Auth\UserPassBase
      */
     protected function login($username, $password)
     {
-        assert(is_string($username));
-        assert(is_string($password));
+        Assert::string($username);
+        Assert::string($password);
 
         $config = \SimpleSAML\Configuration::getInstance();
         $adminPassword = $config->getString('auth.adminpassword', '123');

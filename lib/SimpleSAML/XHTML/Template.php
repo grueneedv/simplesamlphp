@@ -12,6 +12,7 @@ namespace SimpleSAML\XHTML;
 use JaimePerez\TwigConfigurableI18n\Twig\Environment as Twig_Environment;
 use JaimePerez\TwigConfigurableI18n\Twig\Extensions\Extension\I18n as Twig_Extensions_Extension_I18n;
 use Symfony\Component\HttpFoundation\Response;
+use Webmozart\Assert\Assert;
 
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\HTTP;
@@ -553,7 +554,7 @@ class Template extends Response
      */
     private function findTemplatePath($template, $throw_exception = true)
     {
-        assert(is_string($template));
+        Assert::string($template);
 
         list($templateModule, $templateName) = $this->findModuleAndTemplateName($template);
         $templateModule = ($templateModule !== null) ? $templateModule : 'default';

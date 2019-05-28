@@ -4,6 +4,7 @@ namespace SimpleSAML\Metadata;
 
 use SAML2\XML\saml\Issuer;
 use SimpleSAML\Utils\ClearableState;
+use Webmozart\Assert\Assert;
 
 /**
  * This file defines a class for metadata handling.
@@ -99,7 +100,7 @@ class MetaDataStorageHandler implements ClearableState
 
         // get the configuration
         $config = \SimpleSAML\Configuration::getInstance();
-        assert($config instanceof \SimpleSAML\Configuration);
+        Assert::isInstanceOf($config, \SimpleSAML\Configuration);
 
         $baseurl = \SimpleSAML\Utils\HTTP::getSelfURLHost().$config->getBasePath();
 
@@ -141,7 +142,7 @@ class MetaDataStorageHandler implements ClearableState
      */
     public function getList($set = 'saml20-idp-remote')
     {
-        assert(is_string($set));
+        Assert::string($set);
 
         $result = [];
 
@@ -196,7 +197,7 @@ class MetaDataStorageHandler implements ClearableState
      */
     public function getMetaDataCurrentEntityID($set, $type = 'entityid')
     {
-        assert(is_string($set));
+        Assert::string($set);
 
         // first we look for the hostname/path combination
         $currenthostwithpath = \SimpleSAML\Utils\HTTP::getSelfHostWithPath(); // sp.example.org/university
@@ -271,13 +272,13 @@ class MetaDataStorageHandler implements ClearableState
      */
     public function getMetaData($index, $set)
     {
-        assert(is_string($set));
+        Assert::string($set);
 
         if ($index === null) {
             $index = $this->getMetaDataCurrentEntityID($set, 'metaindex');
         }
 
-        assert(is_string($index));
+        Assert::string($index);
 
         foreach ($this->sources as $source) {
             $metadata = $source->getMetaData($index, $set);
@@ -294,7 +295,7 @@ class MetaDataStorageHandler implements ClearableState
 
                 $metadata['metadata-index'] = $index;
                 $metadata['metadata-set'] = $set;
-                assert(array_key_exists('entityid', $metadata));
+                Assert::keyExists($metadata, 'entityid');
                 return $metadata;
             }
         }
@@ -316,8 +317,8 @@ class MetaDataStorageHandler implements ClearableState
      */
     public function getMetaDataConfig($entityId, $set)
     {
-        assert(is_string($entityId));
-        assert(is_string($set));
+        Assert::string($entityId);
+        Assert::string($set);
 
         $metadata = $this->getMetaData($entityId, $set);
         return \SimpleSAML\Configuration::loadFromArray($metadata, $set.'/'.var_export($entityId, true));
@@ -335,8 +336,8 @@ class MetaDataStorageHandler implements ClearableState
      */
     public function getMetaDataConfigForSha1($sha1, $set)
     {
-        assert(is_string($sha1));
-        assert(is_string($set));
+        Assert::string($sha1);
+        Assert::string($set);
 
         $result = [];
 

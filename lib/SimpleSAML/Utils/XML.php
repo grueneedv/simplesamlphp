@@ -10,6 +10,7 @@ namespace SimpleSAML\Utils;
 
 use SimpleSAML\Logger;
 use SimpleSAML\XML\Errors;
+use Webmozart\Assert\Assert;
 
 class XML
 {
@@ -129,7 +130,7 @@ class XML
                 Logger::debug('Encrypted message:');
                 break;
             default:
-                assert(false);
+                Assert::true(false);
         }
 
         $str = self::formatXMLString($message);

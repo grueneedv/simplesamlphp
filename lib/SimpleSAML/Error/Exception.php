@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Error;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Base class for SimpleSAMLphp Exceptions
  *
@@ -44,8 +46,8 @@ class Exception extends \Exception
      */
     public function __construct($message, $code = 0, \Exception $cause = null)
     {
-        assert(is_string($message));
-        assert(is_int($code));
+        Assert::string($message);
+        Assert::integer($code);
 
         parent::__construct($message, $code);
 

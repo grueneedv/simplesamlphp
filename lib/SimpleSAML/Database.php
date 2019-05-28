@@ -2,6 +2,8 @@
 
 namespace SimpleSAML;
 
+use Webmozart\Assert\Assert;
+
 /**
  * This file implements functions to read and write to a group of database servers.
  *
@@ -196,9 +198,9 @@ class Database
      */
     private function query($db, $stmt, $params)
     {
-        assert(is_object($db));
-        assert(is_string($stmt));
-        assert(is_array($params));
+        Assert::isInstanceOf($db, \PDO::class);
+        Assert::string($stmt);
+        Assert::isArray($params);
 
         try {
             $query = $db->prepare($stmt);
@@ -232,8 +234,8 @@ class Database
      */
     private function exec($db, $stmt)
     {
-        assert(is_object($db));
-        assert(is_string($stmt));
+        Assert::isInstanceOf($db, \PDO::class);
+        Assert::string($stmt);
 
         try {
             return $db->exec($stmt);

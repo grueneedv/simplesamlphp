@@ -2,9 +2,10 @@
 
 namespace SimpleSAML\Store;
 
-use \SimpleSAML\Configuration;
-use \SimpleSAML\Logger;
-use \SimpleSAML\Store;
+use SimpleSAML\Configuration;
+use SimpleSAML\Logger;
+use SimpleSAML\Store;
+use Webmozart\Assert\Assert;
 
 /**
  * A data store using a RDBMS to keep the data.
@@ -172,7 +173,7 @@ class SQL extends Store
      */
     public function getTableVersion($name)
     {
-        assert(is_string($name));
+        Assert::string($name);
 
         if (!isset($this->tableVersions[$name])) {
             return 0;
@@ -191,8 +192,8 @@ class SQL extends Store
      */
     public function setTableVersion($name, $version)
     {
-        assert(is_string($name));
-        assert(is_int($version));
+        Assert::string($name);
+        Assert::integer($version);
 
         $this->insertOrUpdate(
             $this->prefix.'_tableVersion',
@@ -215,7 +216,7 @@ class SQL extends Store
      */
     public function insertOrUpdate($table, array $keys, array $data)
     {
-        assert(is_string($table));
+        Assert::string($table);
 
         $colNames = '('.implode(', ', array_keys($data)).')';
         $values = 'VALUES(:'.implode(', :', array_keys($data)).')';
@@ -294,8 +295,8 @@ class SQL extends Store
      */
     public function get($type, $key)
     {
-        assert(is_string($type));
-        assert(is_string($key));
+        Assert::string($type);
+        Assert::string($key);
 
         if (strlen($key) > 50) {
             $key = sha1($key);
@@ -338,9 +339,9 @@ class SQL extends Store
      */
     public function set($type, $key, $value, $expire = null)
     {
-        assert(is_string($type));
-        assert(is_string($key));
-        assert($expire === null || (is_int($expire) && $expire > 2592000));
+        Assert::string($type);
+        Assert::string($key);
+        Assert::nullOrGreaterThan($expire, 2592000);
 
         if (rand(0, 1000) < 10) {
             $this->cleanKVStore();
@@ -377,8 +378,8 @@ class SQL extends Store
      */
     public function delete($type, $key)
     {
-        assert(is_string($type));
-        assert(is_string($key));
+        Assert::string($type);
+        Assert::string($key);
 
         if (strlen($key) > 50) {
             $key = sha1($key);

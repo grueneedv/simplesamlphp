@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\saml\Auth\Process;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Filter for setting the AuthnContextClassRef in the response.
  *
@@ -28,7 +30,7 @@ class AuthnContextClassRef extends \SimpleSAML\Auth\ProcessingFilter
     public function __construct($config, $reserved)
     {
         parent::__construct($config, $reserved);
-        assert(is_array($config));
+        Assert::isArray($config);
 
         if (!isset($config['AuthnContextClassRef'])) {
             throw new \SimpleSAML\Error\Exception('Missing AuthnContextClassRef option in processing filter.');
@@ -46,7 +48,7 @@ class AuthnContextClassRef extends \SimpleSAML\Auth\ProcessingFilter
      */
     public function process(&$state)
     {
-        assert(is_array($state));
+        Assert::isArray($state);
 
         $state['saml:AuthnContextClassRef'] = $this->authnContextClassRef;
     }

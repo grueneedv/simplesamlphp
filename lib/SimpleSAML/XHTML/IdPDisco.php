@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\XHTML;
 
+use Webmozart\Assert\Assert;
+
 /**
  * This class implements a generic IdP discovery service, for use in various IdP
  * discovery service pages. This should reduce code duplication.
@@ -116,7 +118,7 @@ class IdPDisco
      */
     public function __construct(array $metadataSets, $instance)
     {
-        assert(is_string($instance));
+        Assert::string($instance);
 
         // initialize standard classes
         $this->config = \SimpleSAML\Configuration::getInstance();
@@ -392,7 +394,7 @@ class IdPDisco
      */
     protected function setPreviousIdP($idp)
     {
-        assert(is_string($idp));
+        Assert::string($idp);
 
         $this->log('Choice made ['.$idp.'] Setting cookie.');
         $this->setCookie('lastidp', $idp);

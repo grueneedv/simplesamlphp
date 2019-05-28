@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Metadata;
 
+use Webmozart\Assert\Assert;
+
 /**
  * This file defines a flat file metadata source.
  * Instantiation of session handler objects should be done through
@@ -41,7 +43,7 @@ class MetaDataStorageHandlerFlatFile extends MetaDataStorageSource
      */
     protected function __construct($config)
     {
-        assert(is_array($config));
+        Assert::isArray($config);
 
         // get the configuration
         $globalConfig = \SimpleSAML\Configuration::getInstance();

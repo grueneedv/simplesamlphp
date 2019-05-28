@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\core\Auth\Process;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Filter to generate a groups attribute based on many of the attributes of the user.
  *
@@ -25,7 +27,7 @@ class GenerateGroups extends \SimpleSAML\Auth\ProcessingFilter
     {
         parent::__construct($config, $reserved);
 
-        assert(is_array($config));
+        Assert::isArray($config);
 
         if (count($config) === 0) {
             // Use default groups
@@ -54,8 +56,8 @@ class GenerateGroups extends \SimpleSAML\Auth\ProcessingFilter
      */
     public function process(&$request)
     {
-        assert(is_array($request));
-        assert(array_key_exists('Attributes', $request));
+        Assert::isArray($request);
+        Assert::keyExists($request, 'Attributes');
 
         $groups = [];
         $attributes = &$request['Attributes'];
@@ -99,7 +101,7 @@ class GenerateGroups extends \SimpleSAML\Auth\ProcessingFilter
      */
     private static function getRealm($attributes)
     {
-        assert(is_array($attributes));
+        Assert::isArray($attributes);
 
         if (!array_key_exists('eduPersonPrincipalName', $attributes)) {
             return null;
@@ -133,7 +135,7 @@ class GenerateGroups extends \SimpleSAML\Auth\ProcessingFilter
      */
     private static function escapeIllegalChars($string)
     {
-        assert(is_string($string));
+        Assert::string($string);
 
         return preg_replace_callback(
             '/([^a-zA-Z0-9_@=.])/',

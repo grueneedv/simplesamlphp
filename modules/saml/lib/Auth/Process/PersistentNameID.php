@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\saml\Auth\Process;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Authentication processing filter to generate a persistent NameID.
  *
@@ -29,7 +31,7 @@ class PersistentNameID extends \SimpleSAML\Module\saml\BaseNameIDGenerator
     public function __construct($config, $reserved)
     {
         parent::__construct($config, $reserved);
-        assert(is_array($config));
+        Assert::isArray($config);
 
         $this->format = \SAML2\Constants::NAMEID_PERSISTENT;
 

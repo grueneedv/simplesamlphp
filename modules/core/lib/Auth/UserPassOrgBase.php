@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\core\Auth;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Helper class for username/password/organization authentication.
  *
@@ -86,8 +88,8 @@ abstract class UserPassOrgBase extends \SimpleSAML\Auth\Source
      */
     public function __construct($info, &$config)
     {
-        assert(is_array($info));
-        assert(is_array($config));
+        Assert::isArray($info);
+        Assert::isArray($config);
 
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
@@ -130,7 +132,7 @@ abstract class UserPassOrgBase extends \SimpleSAML\Auth\Source
      */
     protected function setUsernameOrgMethod($usernameOrgMethod)
     {
-        assert(in_array($usernameOrgMethod, ['none', 'allow', 'force'], true));
+        Assert::oneOf($usernameOrgMethod, ['none', 'allow', 'force']);
 
         $this->usernameOrgMethod = $usernameOrgMethod;
     }
@@ -203,7 +205,7 @@ abstract class UserPassOrgBase extends \SimpleSAML\Auth\Source
      */
     public function authenticate(&$state)
     {
-        assert(is_array($state));
+        Assert::isArray($state);
 
         // We are going to need the authId in order to retrieve this authentication source later
         $state[self::AUTHID] = $this->authId;
@@ -261,16 +263,16 @@ abstract class UserPassOrgBase extends \SimpleSAML\Auth\Source
      */
     public static function handleLogin($authStateId, $username, $password, $organization)
     {
-        assert(is_string($authStateId));
-        assert(is_string($username));
-        assert(is_string($password));
-        assert(is_string($organization));
+        Assert::string($authStateId);
+        Assert::string($username);
+        Assert::string($password);
+        assert::string($organization);
 
         /* Retrieve the authentication state. */
         $state = \SimpleSAML\Auth\State::loadState($authStateId, self::STAGEID);
 
         /* Find authentication source. */
-        assert(array_key_exists(self::AUTHID, $state));
+        Assert::keyExists($state, self::AUTHID);
         $source = \SimpleSAML\Auth\Source::getById($state[self::AUTHID]);
         if ($source === null) {
             throw new \Exception('Could not find authentication source with id '.$state[self::AUTHID]);
@@ -313,13 +315,13 @@ abstract class UserPassOrgBase extends \SimpleSAML\Auth\Source
      */
     public static function listOrganizations($authStateId)
     {
-        assert(is_string($authStateId));
+        Assert::string($authStateId);
 
         /* Retrieve the authentication state. */
         $state = \SimpleSAML\Auth\State::loadState($authStateId, self::STAGEID);
 
         /* Find authentication source. */
-        assert(array_key_exists(self::AUTHID, $state));
+        Assert::keyExists($state, self::AUTHID);
         $source = \SimpleSAML\Auth\Source::getById($state[self::AUTHID]);
         if ($source === null) {
             throw new \Exception('Could not find authentication source with id '.$state[self::AUTHID]);

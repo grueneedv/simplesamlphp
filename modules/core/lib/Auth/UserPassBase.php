@@ -83,8 +83,8 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
      */
     public function __construct($info, &$config)
     {
-        assert(is_array($info));
-        assert(is_array($config));
+        Assert::isArray($info);
+        Assert::isArray($config);
 
         if (isset($config['core:loginpage_links'])) {
             $this->loginLinks = $config['core:loginpage_links'];
@@ -118,7 +118,7 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
      */
     public function setForcedUsername($forcedUsername)
     {
-        assert(is_string($forcedUsername) || $forcedUsername === null);
+        Assert::nullOrString($forcedUsername);
         $this->forcedUsername = $forcedUsername;
     }
 
@@ -183,7 +183,7 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
      */
     public function authenticate(&$state)
     {
-        assert(is_array($state));
+        Assert::isArray($state);
 
         /*
          * Save the identifier of this authentication source, so that we can
@@ -221,7 +221,7 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
             }
 
             $attributes = $this->login($username, $password);
-            assert(is_array($attributes));
+            Assert::isArray($attributes);
             $state['Attributes'] = $attributes;
 
             return;
@@ -239,7 +239,7 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
         \SimpleSAML\Utils\HTTP::redirectTrustedURL($url, $params);
 
         // The previous function never returns, so this code is never executed.
-        assert(false);
+        assert::true(false);
     }
 
 
@@ -273,15 +273,15 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
      */
     public static function handleLogin($authStateId, $username, $password)
     {
-        assert(is_string($authStateId));
-        assert(is_string($username));
-        assert(is_string($password));
+        Assert::string($authStateId);
+        Assert::string($username);
+        Assert::string($password);
 
         // Here we retrieve the state array we saved in the authenticate-function.
         $state = \SimpleSAML\Auth\State::loadState($authStateId, self::STAGEID);
 
         // Retrieve the authentication source we are executing.
-        assert(array_key_exists(self::AUTHID, $state));
+        Assert::keyExists($state, self::AUTHID);
         $source = \SimpleSAML\Auth\Source::getById($state[self::AUTHID]);
         if ($source === null) {
             throw new \Exception('Could not find authentication source with id '.$state[self::AUTHID]);
@@ -303,7 +303,7 @@ abstract class UserPassBase extends \SimpleSAML\Auth\Source
         \SimpleSAML\Logger::stats('User \''.$username.'\' successfully authenticated from '.$_SERVER['REMOTE_ADDR']);
 
         // Save the attributes we received from the login-function in the $state-array
-        assert(is_array($attributes));
+        Assert::isArray($attributes);
         $state['Attributes'] = $attributes;
 
         // Return control to SimpleSAMLphp after successful authentication.

@@ -2,7 +2,8 @@
 
 namespace SimpleSAML\Metadata;
 
-use \SAML2\XML\md\EntityDescriptor;
+use SAML2\XML\md\EntityDescriptor;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for generating SAML 2.0 metadata from SimpleSAMLphp metadata arrays.
@@ -49,7 +50,7 @@ class SAMLBuilder
      */
     public function __construct($entityId, $maxCache = null, $maxDuration = null)
     {
-        assert(is_string($entityId));
+        Assert::string($entityId);
 
         $this->maxCache = $maxCache;
         $this->maxDuration = $maxDuration;
@@ -105,7 +106,7 @@ class SAMLBuilder
      */
     public function getEntityDescriptorText($formatted = true)
     {
-        assert(is_bool($formatted));
+        Assert::boolean($formatted);
 
         $xml = $this->getEntityDescriptor();
         if ($formatted) {
@@ -124,9 +125,9 @@ class SAMLBuilder
      */
     public function addSecurityTokenServiceType($metadata)
     {
-        assert(is_array($metadata));
-        assert(isset($metadata['entityid']));
-        assert(isset($metadata['metadata-set']));
+        Assert::isArray($metadata);
+        Assert::notNull($metadata['entityid']);
+        Assert::notNull($metadata['metadata-set']);
 
         $metadata = \SimpleSAML\Configuration::loadFromArray($metadata, $metadata['entityid']);
         $defaultEndpoint = $metadata->getDefaultEndpoint('SingleSignOnService');
@@ -341,7 +342,7 @@ class SAMLBuilder
      */
     private static function createEndpoints(array $endpoints, $indexed)
     {
-        assert(is_bool($indexed));
+        Assert::boolean($indexed);
 
         $ret = [];
 
@@ -454,8 +455,8 @@ class SAMLBuilder
      */
     public function addMetadata($set, $metadata)
     {
-        assert(is_string($set));
-        assert(is_array($metadata));
+        Assert::string($set);
+        Assert::isArray($metadata);
 
         $this->setExpiration($metadata);
 
@@ -490,10 +491,10 @@ class SAMLBuilder
      */
     public function addMetadataSP20($metadata, $protocols = [\SAML2\Constants::NS_SAMLP])
     {
-        assert(is_array($metadata));
-        assert(is_array($protocols));
-        assert(isset($metadata['entityid']));
-        assert(isset($metadata['metadata-set']));
+        Assert::isArray($metadata);
+        Assert::isArray($protocols);
+        Assert::notNull($metadata['entityid']);
+        Assert::notNull($metadata['metadata-set']);
 
         $metadata = \SimpleSAML\Configuration::loadFromArray($metadata, $metadata['entityid']);
 
@@ -547,9 +548,9 @@ class SAMLBuilder
      */
     public function addMetadataIdP20($metadata)
     {
-        assert(is_array($metadata));
-        assert(isset($metadata['entityid']));
-        assert(isset($metadata['metadata-set']));
+        Assert::isArray($metadata);
+        Assert::notNull($metadata['entityid']);
+        Assert::notNull($metadata['metadata-set']);
 
         $metadata = \SimpleSAML\Configuration::loadFromArray($metadata, $metadata['entityid']);
 
@@ -597,9 +598,9 @@ class SAMLBuilder
      */
     public function addMetadataSP11($metadata)
     {
-        assert(is_array($metadata));
-        assert(isset($metadata['entityid']));
-        assert(isset($metadata['metadata-set']));
+        Assert::isArray($metadata);
+        Assert::notNull($metadata['entityid']);
+        Assert::notNull($metadata['metadata-set']);
 
         $metadata = \SimpleSAML\Configuration::loadFromArray($metadata, $metadata['entityid']);
 
@@ -636,9 +637,9 @@ class SAMLBuilder
      */
     public function addMetadataIdP11($metadata)
     {
-        assert(is_array($metadata));
-        assert(isset($metadata['entityid']));
-        assert(isset($metadata['metadata-set']));
+        Assert::isArray($metadata);
+        Assert::notNull($metadata['entityid']);
+        Assert::notNull($metadata['metadata-set']);
 
         $metadata = \SimpleSAML\Configuration::loadFromArray($metadata, $metadata['entityid']);
 
@@ -669,9 +670,9 @@ class SAMLBuilder
      */
     public function addAttributeAuthority(array $metadata)
     {
-        assert(is_array($metadata));
-        assert(isset($metadata['entityid']));
-        assert(isset($metadata['metadata-set']));
+        Assert::isArray($metadata);
+        Assert::notNull($metadata['entityid']);
+        Assert::notNull($metadata['metadata-set']);
 
         $metadata = \SimpleSAML\Configuration::loadFromArray($metadata, $metadata['entityid']);
 
@@ -709,9 +710,9 @@ class SAMLBuilder
      */
     public function addContact($type, $details)
     {
-        assert(is_string($type));
-        assert(is_array($details));
-        assert(in_array($type, ['technical', 'support', 'administrative', 'billing', 'other'], true));
+        Assert::string($type);
+        Assert::isArray($details);
+        Assert::oneOf($type, ['technical', 'support', 'administrative', 'billing', 'other']);
 
         // TODO: remove this check as soon as getContact() is called always before calling this function
         $details = \SimpleSAML\Utils\Config\Metadata::getContact($details);
@@ -767,8 +768,8 @@ class SAMLBuilder
      */
     private function addX509KeyDescriptor(\SAML2\XML\md\RoleDescriptor $rd, $use, $x509data)
     {
-        assert(in_array($use, ['encryption', 'signing'], true));
-        assert(is_string($x509data));
+        Assert::oneOf($use, ['encryption', 'signing']);
+        Assert::string($x509data);
 
         $keyDescriptor = \SAML2\Utils::createKeyDescriptor($x509data);
         $keyDescriptor->setUse($use);
