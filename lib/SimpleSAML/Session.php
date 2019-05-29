@@ -574,7 +574,7 @@ class Session implements \Serializable, Utils\ClearableState
      */
     public function setRememberMeExpire($expire = null)
     {
-        Assert::nullOrInt($expire);
+        Assert::nullOrInteger($expire);
 
         if ($expire === null) {
             $expire = time() + self::$config->getInteger('session.rememberme.lifetime', 14 * 86400);
