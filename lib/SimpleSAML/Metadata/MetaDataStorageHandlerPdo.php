@@ -222,9 +222,9 @@ class MetaDataStorageHandlerPdo extends MetaDataStorageSource
      */
     public function addEntry($index, $set, $entityData)
     {
-        assert(is_string($index));
-        assert(is_string($set));
-        assert(is_array($entityData));
+        Assert::string($index);
+        Assert::string($set);
+        assert::isArray($entityData);
 
         if (!in_array($set, $this->supportedSets, true)) {
             return false;
@@ -272,7 +272,7 @@ class MetaDataStorageHandlerPdo extends MetaDataStorageSource
      */
     private function getTableName($table)
     {
-        assert(is_string($table));
+        Assert::string($table);
 
         return $this->db->applyPrefix(str_replace("-", "_", $this->tablePrefix.$table));
     }
