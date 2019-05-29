@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\core\Auth;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Helper class for username/password authentication.
  *

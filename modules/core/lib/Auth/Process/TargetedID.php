@@ -85,7 +85,7 @@ class TargetedID extends \SimpleSAML\Auth\ProcessingFilter
     public function process(&$state)
     {
         Assert::isArray($state);
-        Assert::keyExists($stae, 'Attributes');
+        Assert::keyExists($state, 'Attributes');
 
         if ($this->attribute === null) {
             if (!array_key_exists('UserID', $state)) {
