@@ -324,7 +324,7 @@ abstract class MetaDataStorageSource
      */
     protected function updateEntityID($metadataSet, $entityId, array $metadataEntry)
     {
-        Assert:string($metadataSet);
+        Assert::string($metadataSet);
         Assert::string($entityId);
 
         $modifiedMetadataEntry = $metadataEntry;

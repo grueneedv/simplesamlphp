@@ -100,7 +100,7 @@ class MetaDataStorageHandler implements ClearableState
 
         // get the configuration
         $config = \SimpleSAML\Configuration::getInstance();
-        Assert::isInstanceOf($config, \SimpleSAML\Configuration);
+        Assert::isInstanceOf($config, \SimpleSAML\Configuration::class);
 
         $baseurl = \SimpleSAML\Utils\HTTP::getSelfURLHost().$config->getBasePath();
 
