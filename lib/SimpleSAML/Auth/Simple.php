@@ -319,7 +319,7 @@ class Simple
      */
     public function getLoginURL($returnTo = null)
     {
-        Assert::nulOrString($returnTo);
+        Assert::nullOrString($returnTo);
 
         if ($returnTo === null) {
             $returnTo = HTTP::getSelfURL();
