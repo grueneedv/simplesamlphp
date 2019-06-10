@@ -147,6 +147,7 @@ class Template extends Response
             if ($controller && class_exists($controller) &&
                 in_array(TemplateControllerInterface::class, class_implements($controller))
             ) {
+                /** @var \SimpleSAML\XHTML\TemplateControllerInterface $controller */
                 $this->controller = new $controller();
             }
 
