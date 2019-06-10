@@ -18,6 +18,10 @@ class TemplateLoader extends \Twig\Loader\FilesystemLoader
      * This method adds a namespace dynamically so that we can load templates from modules whenever we want.
      *
      * {@inheritdoc}
+     *
+     * @param string $name
+     * @param bool $throw
+     * @return string|false|null
      */
     protected function findTemplate($name, $throw = true)
     {

@@ -727,7 +727,7 @@ class Template extends Response
     /**
      * @param string $tag
      *
-     * @return array
+     * @return array|null
      * @deprecated This method will be removed in SSP 2.0. Please use \SimpleSAML\Locale\Translate::getTag() instead.
      */
     public function getTag($tag)
