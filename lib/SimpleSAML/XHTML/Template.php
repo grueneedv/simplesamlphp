@@ -78,6 +78,8 @@ class Template extends Response
 
     /**
      * Current module, if any.
+     *
+     * @var array
      */
     private $module;
 
@@ -110,7 +112,7 @@ class Template extends Response
      *
      * @var array
      */
-    private $theme;
+    private $theme = ['module' => null, 'name' => 'default'];
 
     /**
      * Constructor
