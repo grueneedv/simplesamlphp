@@ -856,7 +856,7 @@ class Template extends Response
      * @param bool $fallbackdefault
      * @param array $oldreplacements
      * @param bool $striptags
-     * @return string
+     * @return string|null
      */
     public function t(
         $tag,
