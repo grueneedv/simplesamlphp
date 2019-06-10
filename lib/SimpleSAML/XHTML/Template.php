@@ -574,7 +574,8 @@ class Template extends Response
             $filename = Module::getModuleDir($templateModule).'/templates/'.$templateName;
         } else {
             // .../templates/<theme>/<templateName>
-            $filename = $this->configuration->getPathValue('templatedir', 'templates/').$templateName;
+            $base = $this->configuration->getPathValue('templatedir', 'templates/') ?: 'templates/';
+            $filename = $base.$templateName;
         }
 
         if (file_exists($filename)) {
@@ -593,7 +594,8 @@ class Template extends Response
             $filename = Module::getModuleDir($templateModule).'/templates/'.$templateName;
         } else {
             // .../templates/<templateName>
-            $filename = $this->configuration->getPathValue('templatedir', 'templates/').'/'.$templateName;
+            $base = $this->configuration->getPathValue('templatedir', 'templates/') ?: 'templates/';
+            $filename = $base.'/'.$templateName;
         }
 
         if (file_exists($filename)) {
