@@ -108,9 +108,9 @@ class Template extends Response
      * of the module and the name of the theme, respectively. If we are using the default theme, the variable has
      * the 'default' string in the "name" key, and 'null' in the "module" key.
      *
-     * @var array|null
+     * @var array
      */
-    private $theme = null;
+    private $theme;
 
     /**
      * Constructor
