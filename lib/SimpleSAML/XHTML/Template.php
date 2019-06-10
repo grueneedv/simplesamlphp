@@ -79,7 +79,7 @@ class Template extends Response
     /**
      * Current module, if any.
      *
-     * @var array
+     * @var string
      */
     private $module;
 
